@@ -1,0 +1,62 @@
+package com.ecommerce.app.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ecommerce.app.exceptions.ProductException;
+import com.ecommerce.app.exceptions.UserException;
+import com.ecommerce.app.services.CartImpl;
+import com.ecommerce.app.support.ShowCart;
+
+
+
+@RestController
+public class CartController {
+
+	@Autowired
+	private CartImpl ci;
+	
+	@PutMapping("/addToCart/{CustomerId}/{ProductId}")
+	public ResponseEntity<ShowCart> addProduct(@PathVariable Integer CustomerId,@PathVariable Integer ProductId) throws CustomerException, ProductException {
+		ShowCart cr = ci.addProduct( CustomerId, ProductId);
+		return new ResponseEntity<>(cr,HttpStatus.ACCEPTED);
+	}
+//	
+//	
+//	@PutMapping("/setProductQuantity/{CustomerId}/{ProductId}/{Quantity}")
+//	public ResponseEntity<Cart> setProductQuantity(@PathVariable Integer CustomerId,@PathVariable Integer ProductId,@PathVariable Integer Quantity) throws CustomerException, ProductException {
+//		Cart cr = ci.SetProductQuantity( CustomerId, ProductId,Quantity);
+//		return new ResponseEntity<>(cr,HttpStatus.ACCEPTED);
+//	}
+//	
+//	@PutMapping("/addProductQuantity/{CustomerId}/{ProductId}/{Quantity}")
+//	public ResponseEntity<Cart> addProductQuantity(@PathVariable Integer CustomerId,@PathVariable Integer ProductId,@PathVariable Integer Quantity) throws CustomerException, ProductException {
+//		Cart cr = ci.addProductQuantity( CustomerId, ProductId,Quantity);
+//		return new ResponseEntity<>(cr,HttpStatus.ACCEPTED);
+//	}
+//	
+//	@PutMapping("/DecreaseProductQuantity/{CustomerId}/{ProductId}/{Quantity}")
+//	public ResponseEntity<Cart> decProductQuantity(@PathVariable Integer CustomerId,@PathVariable Integer ProductId,@PathVariable Integer Quantity) throws CustomerException, ProductException {
+//		Cart cr = ci.decreaseProductQuantity( CustomerId, ProductId,Quantity);
+//		return new ResponseEntity<>(cr,HttpStatus.ACCEPTED);
+//	}
+//	
+	@PutMapping("/removeProductFromCart/{CustomerId}/{ProductId}")
+	public ResponseEntity<ShowCart> removeProductFromCart(@PathVariable Integer CustomerId,@PathVariable Integer ProductId) throws UserException, ProductException {
+		ShowCart cr = ci.removeProduct( CustomerId, ProductId);
+		return new ResponseEntity<>(cr,HttpStatus.ACCEPTED);
+	}
+//	
+	@GetMapping("/viewCart/{CustomerId}")
+	public ResponseEntity<ShowCart> decProductQuantity(@PathVariable Integer CustomerId) throws UserException, ProductException {
+		ShowCart cr = ci.viewCart( CustomerId);
+		return new ResponseEntity<>(cr,HttpStatus.ACCEPTED);
+	}
+	
+}

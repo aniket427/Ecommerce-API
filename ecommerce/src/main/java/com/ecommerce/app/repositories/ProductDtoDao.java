@@ -1,0 +1,8 @@
+package com.ecommerce.app.repositories;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import com.ecommerce.app.model.ProductDto;
+
+public interface ProductDtoDao extends JpaRepository<ProductDto, Integer> {
+
+}

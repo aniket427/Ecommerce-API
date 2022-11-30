@@ -1,0 +1,43 @@
+package com.ecommerce.app.services;
+
+import java.util.List;
+
+import com.masai.Medel.Help.ShowOrders;
+import com.masai.exception.CustomerException;
+import com.masai.exception.OrderException;
+import com.masai.model.Orders;
+
+public interface OrderItr {
+
+	//user methods
+	
+	// clear cart and and add it to list of order  
+	// cannot make more then 5 orders before delivery
+	public ShowOrders makeOrder(Integer CustomerID)throws OrderException, CustomerException; 
+	
+	// will remove that particular order
+	//will return that order as well as a confirmation String;
+//	public com.masai.Medel.Help.RemoveOrder RemoveOrder(Integer CustomerID,Integer password,Integer orderNumber)throws OrderException, CustomerException; 
+//	
+//	//remove all orders
+//   public String ClearOrder(Integer Customerid, String password) throws OrderException, CustomerException;
+//
+   public ShowOrders viewOrders(Integer CustomerID, String password) throws OrderException, CustomerException;
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}

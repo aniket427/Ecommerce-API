@@ -1,0 +1,21 @@
+package com.ecommerce.app.model;
+
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+
+@Entity
+@NoArgsConstructor 
+@AllArgsConstructor
+@Data
+@EqualsAndHashCode(callSuper=false)
+public class Orders {
+
+@ManyToOne
+private User user;
+}

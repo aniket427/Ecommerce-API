@@ -1,0 +1,122 @@
+package com.ecommerce.app.controller;
+
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ecommerce.app.exceptions.AdminException;
+import com.ecommerce.app.exceptions.LoginException;
+import com.ecommerce.app.exceptions.UserException;
+import com.ecommerce.app.model.User;
+import com.ecommerce.app.services.UserService;
+
+/*
+	Controller / endPoints (API calls) 
+	Will receive the implementation or response from the Service Layer
+	Will provide data / response for presentation
+*/
+
+@RestController
+public class UserController {
+
+	@Autowired
+	private UserService cService;
+
+//### Add New User ###
+	@PostMapping("/User/register")
+	public ResponseEntity<User> registerUserHandler(@Valid @RequestBody User User)
+			throws UserException {
+
+		User newUser = cService.insertUser(User);
+
+		return new ResponseEntity<User>(newUser, HttpStatus.CREATED);
+	}
+
+//### Update Existing User ###
+	@PutMapping("/User/update")
+	public ResponseEntity<User> updateUserHandler(@Valid @RequestBody User User)
+			throws UserException, LoginException {
+
+		User updatedUser = cService.updateUser(User);
+
+		return new ResponseEntity<User>(updatedUser, HttpStatus.CREATED);
+	}
+
+//### Update Password of User ###
+	@PutMapping("/User/update/")
+	public ResponseEntity<User> updateUserPassword(@RequestParam("mobile") String mobile,
+			@RequestParam("oldpass") String oldpass, @RequestParam("newpass") String newpass)
+			throws UserException, LoginException {
+
+		User updatedUser = cService.updatePassword(mobile, oldpass, newpass);
+
+		return new ResponseEntity<User>(updatedUser, HttpStatus.CREATED);
+
+	}
+
+//### Delete Account ###
+	@DeleteMapping("/User/delete")
+	public ResponseEntity<User> deleteAccountHandler(@RequestParam("UserId") Integer UserId)
+			throws UserException, LoginException {
+
+		User deletedUser = cService.deleteUser(UserId);
+
+		return new ResponseEntity<User>(deletedUser, HttpStatus.OK);
+
+	}
+
+//### Get All User in a List ###
+	@GetMapping("/User")
+	public ResponseEntity<List<User>> getAllUserHandler() throws UserException, AdminException {
+
+		List<User> Users = cService.getAllUsers();
+
+		return new ResponseEntity<List<User>>(Users, HttpStatus.OK);
+
+	}
+
+//### Get single User using UserId
+	@GetMapping("/User/{UserId}")
+	public ResponseEntity<User> getUserByIdHandler(@PathVariable("UserId") Integer UserId)
+			throws UserException, AdminException {
+
+		User fetchedUser = cService.getUserById(UserId);
+
+		return new ResponseEntity<User>(fetchedUser, HttpStatus.OK);
+	}
+
+//### Get single User using Mobile ###
+	@GetMapping("/User/mobile")
+	public ResponseEntity<User> getUserByMobileHandler(@RequestParam("mobileNum") String mobile)
+			throws UserException, AdminException {
+
+		User fetchedUser = cService.getUserByMobile(mobile);
+
+		return new ResponseEntity<User>(fetchedUser, HttpStatus.OK);
+	}
+
+//### Validate User ###
+	@GetMapping("/validate")
+	public ResponseEntity<User> validateUserHandler(@RequestParam("userName") String userName,
+			@RequestParam("password") String password) throws UserException, AdminException {
+
+		User validatedUser = cService.validateUser(userName, password);
+
+		return new ResponseEntity<User>(validatedUser, HttpStatus.OK);
+	}
+
+
+
+}

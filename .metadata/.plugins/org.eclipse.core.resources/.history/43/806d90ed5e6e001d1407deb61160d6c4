@@ -1,0 +1,63 @@
+package com.ecommerce.app.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ecommerce.app.services.CategoryImpl;
+
+
+@RestController
+public class CategoryController {
+
+	@Autowired
+	private CategoryImpl ci;
+	
+	@PutMapping("/addCategory/{CategoryName}")
+	public ResponseEntity<Category> addCategory(@PathVariable String CategoryName) throws AddressException, CustomerException, CatrgoryException {
+		Category ad = ci.addCategory( CategoryName);
+		return new ResponseEntity<>(ad,HttpStatus.ACCEPTED);
+	}
+	
+	@PutMapping("/updateCategory")
+	public ResponseEntity<Category> updateCategory(@RequestBody Category Category) throws AddressException, CustomerException, CatrgoryException {
+		Category ad = ci.UpdateCategory( Category);
+		return new ResponseEntity<>(ad,HttpStatus.ACCEPTED);
+	}
+	
+	@DeleteMapping("/deleteCategory/{CategoryName}")
+	public ResponseEntity<String> deleteCategory(@PathVariable String CategoryName) throws AddressException, CustomerException, CatrgoryException {
+		String ad = ci.DeleteCategory( CategoryName);
+		return new ResponseEntity<>(ad,HttpStatus.ACCEPTED);
+	}
+	
+	@GetMapping("/allCategory")
+	public ResponseEntity<List<Category>> allCategory() throws AddressException, CustomerException, CatrgoryException {
+		List<Category> ad = ci.allCategory( );
+		return new ResponseEntity<>(ad,HttpStatus.ACCEPTED);
+	}
+
+	@GetMapping("/getCategoryByName/{CategoryName}")
+	public ResponseEntity<Category> getCategoryByName(@PathVariable String CategoryName) throws AddressException, CustomerException, CatrgoryException {
+		Category ad = ci.ViewCategoryByName( CategoryName);
+		return new ResponseEntity<>(ad,HttpStatus.ACCEPTED);
+	}
+	
+	@GetMapping("/getCategoryById/{CategoryId}")
+	public ResponseEntity<Category> getCategoryById(@PathVariable Integer CategoryId) throws AddressException, CustomerException, CatrgoryException {
+		Category ad = ci.ViewCategoryById( CategoryId);
+		return new ResponseEntity<>(ad,HttpStatus.ACCEPTED);
+	}
+	
+	
+	
+	
+}

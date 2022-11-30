@@ -1,0 +1,87 @@
+package com.ecommerce.app.services;
+
+
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.ecommerce.app.exceptions.AdminException;
+import com.ecommerce.app.exceptions.LoginException;
+import com.ecommerce.app.model.Admin;
+import com.ecommerce.app.model.LoginSession;
+import com.ecommerce.app.repositories.AdminRepo;
+import com.ecommerce.app.repositories.LoginSessionDao;
+
+
+@Service
+public class AdminServicesImpl implements AdminServices {
+	
+
+@Autowired
+	private AdminRepo aRepo;
+
+
+@Autowired
+	private LoginSessionDao loginDao;
+	
+    
+	
+	@Override
+	public Admin insertAdmin(Admin admin) throws AdminException {
+		// TODO Auto-generated method stub
+		Admin ad=aRepo.save(admin);
+		return ad;
+	}
+
+	@Override
+	public Admin updateAdmin(Admin admin)throws AdminException, LoginException {
+		
+		Optional<LoginSession> existingSession = loginDao.findById(admin.getAdminId());
+		
+		if(existingSession == null) throw new LoginException("Please login to update your data");
+		
+		Optional<Admin> optional = aRepo.findById(admin.getAdminId());
+		
+		if(optional.isPresent()) {
+
+			loginDao.deleteById(admin.getAdminId());
+			return aRepo.save(admin);
+		}
+		else {
+			throw new AdminException("Invalid Admin details");
+		}
+	}
+	
+	@Override
+	public Admin deleteAdminById(Integer adminId) throws AdminException, LoginException {
+		// TODO Auto-generated method stub
+		
+		Optional<LoginSession> existingSession = loginDao.findById(adminId);
+		
+		if(existingSession == null) throw new LoginException("Please login to update your data");
+		
+		Optional<Admin> opt=aRepo.findById(adminId);
+		
+		if(opt.isPresent()) {
+			
+			LoginSession session=existingSession.get();
+			loginDao.delete(session);
+			
+			
+			Admin existingAdmin=opt.get();
+			aRepo.delete(existingAdmin);
+			
+		  return existingAdmin;	
+		  
+		}else {
+			
+			throw new AdminException("Admin does not exist");
+		}
+	}
+
+
+
+
+ 
+	
+}

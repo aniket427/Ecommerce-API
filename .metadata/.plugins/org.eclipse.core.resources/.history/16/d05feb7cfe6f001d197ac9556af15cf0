@@ -1,0 +1,66 @@
+package com.ecommerce.app.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ecommerce.app.exceptions.CategoryException;
+import com.ecommerce.app.exceptions.ProductException;
+import com.ecommerce.app.model.Product;
+import com.ecommerce.app.services.ProductImpl;
+import com.ecommerce.app.support.ShowProduct;
+
+
+@RestController
+public class ProductController {
+
+	@Autowired
+	private ProductImpl pi;
+	
+	
+	@PutMapping("/addProduct/{productId}")
+	public ResponseEntity<ShowProduct> addProduct(@RequestBody Product product,@PathVariable Integer productId)throws ProductException, CategoryException{
+		ShowProduct spr=pi.addProduct(product,productId);	
+    	return new ResponseEntity<>(spr,HttpStatus.ACCEPTED);
+	};
+	
+	@PutMapping("/updateProduct")
+	public ResponseEntity<ShowProduct> updateProduct(@RequestBody Product product)throws ProductException{
+		ShowProduct pr=pi.updateProduct(product);	
+    	return new ResponseEntity<>(pr,HttpStatus.ACCEPTED);
+	};
+	
+	@DeleteMapping("/deleteProduct/{productId}")
+	public ResponseEntity<String> deleteProduct(@PathVariable Integer productId)throws ProductException{
+		String pr=pi.deleteProduct(productId);	
+    	return new ResponseEntity<>(pr,HttpStatus.ACCEPTED);
+	};
+	
+	@GetMapping("/allProducts")
+	public ResponseEntity<List<ShowProduct>> allProduct()throws ProductException{
+		List<ShowProduct> pr=pi.allProducts();	
+    	return new ResponseEntity<>(pr,HttpStatus.ACCEPTED);
+	};
+	
+	@GetMapping("/getProductByName/{ProductName}")
+	public ResponseEntity<ShowProduct> getProductByName(@PathVariable String ProductName)throws ProductException{
+		ShowProduct pr=pi.getProductByName(ProductName);	
+    	return new ResponseEntity<>(pr,HttpStatus.ACCEPTED);
+	};
+	
+	@GetMapping("/getProductByID/{ProductId}")
+	public ResponseEntity<ShowProduct> getProductById(@PathVariable Integer ProductId)throws ProductException{
+		ShowProduct pr=pi.getProductByID(ProductId);	
+    	return new ResponseEntity<>(pr,HttpStatus.ACCEPTED);
+	};
+	
+	
+}

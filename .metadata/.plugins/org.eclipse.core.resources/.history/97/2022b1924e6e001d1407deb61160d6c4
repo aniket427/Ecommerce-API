@@ -1,0 +1,25 @@
+package com.ecommerce.app.services;
+
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
+
+import com.ecommerce.app.exceptions.AdminException;
+import com.ecommerce.app.exceptions.LoginException;
+import com.ecommerce.app.model.Admin;
+
+
+
+public interface AdminServices {
+   
+	
+	public Admin insertAdmin(Admin admin) throws AdminException;
+	
+	public Admin updateAdmin(Admin admin) throws AdminException, LoginException;
+	
+	public Admin deleteAdminById(Integer adminId) throws AdminException, LoginException;
+	
+
+}
+

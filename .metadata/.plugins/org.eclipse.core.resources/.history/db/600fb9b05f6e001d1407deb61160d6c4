@@ -1,0 +1,157 @@
+package com.masai.servicesImpl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.masai.Medel.Help.ShowProduct;
+import com.masai.Repo.CategoryRepo;
+import com.masai.Repo.ProductRepo;
+import com.masai.exception.CatrgoryException;
+import com.masai.exception.ProductException;
+import com.masai.model.Category;
+import com.masai.model.Product;
+import com.masai.servicesItr.ProductItr;
+
+@Service
+public class ProductImpl implements ProductItr {
+
+	@Autowired
+	private ProductRepo pr;
+	
+	@Autowired
+	private CategoryRepo cr;
+	
+	@Override
+	public ShowProduct addProduct(Product product,Integer CategoryId) throws ProductException, CatrgoryException {
+		
+		Product pr1=pr.getProductByName(product.getProductName());
+		
+		Optional<Category> c=cr.findById(CategoryId);
+		if(pr1==null) {
+			
+			if(c.isPresent()) {
+				
+				
+				product.setCategory(c.get());
+				
+				Product pr2= pr.save(product);
+				
+				if(c.get().getProducts()==null) {
+					List<Product> lp= new ArrayList<>();
+					lp.add(pr2);
+				c.get().setProducts(lp);
+					cr.save(c.get());
+				}else {
+					c.get().getProducts().add(pr2);
+					cr.save(c.get());
+				}
+				
+				ShowProduct sp=new ShowProduct(pr2.getProductid(), pr2.getProductName(),pr2.getPrice(),pr2.getColor(),pr2.getDiscription(), pr2.getManufacturer(), pr2.getQuantity(), CategoryId, c.get().getCategoryName());
+ 
+						
+						return sp;
+			}else {
+				throw new CatrgoryException("No category found compatible for your product sry we dont sell these");
+			}
+		}
+		throw new ProductException("A Product is already present with ProductName : "+product.getProductName());
+	}
+
+	@Override
+	public ShowProduct updateProduct(Product product) throws ProductException {
+		// TODO Auto-generated method stub
+		
+		Optional<Product> pr1= pr.findById(product.getProductid());
+		if(pr1.isPresent()) {
+			pr1.get().setColor(product.getColor()) ;
+			pr1.get().setDiscription(product.getDiscription());
+			pr1.get().setManufacturer(product.getManufacturer());
+			pr1.get().setPrice(product.getPrice());
+			
+			Product pr2=pr.getProductByName(product.getProductName());
+		
+			if(pr2==null) {
+				pr1.get().setProductName(product.getProductName());
+				pr.save(pr1.get());
+				
+				ShowProduct sp=new ShowProduct(pr1.get().getProductid(), pr1.get().getProductName(),pr1.get().getPrice(),pr1.get().getColor(),pr1.get().getDiscription(), pr1.get().getManufacturer(), pr1.get().getQuantity(), pr1.get().getCategory().getCategoryId(), pr1.get().getCategory().getCategoryName());
+				 
+				return sp;
+			}
+			else if(pr2.getProductName().equals(pr1.get().getProductName()) ) {
+				 
+					pr1.get().setProductName(product.getProductName());
+					pr.save(pr1.get());
+					
+					ShowProduct sp=new ShowProduct(pr1.get().getProductid(), pr1.get().getProductName(),pr1.get().getPrice(),pr1.get().getColor(),pr1.get().getDiscription(), pr1.get().getManufacturer(), pr1.get().getQuantity(), pr1.get().getCategory().getCategoryId(), pr1.get().getCategory().getCategoryName());
+					 
+					return sp;
+				}
+				else {
+					throw new ProductException("A Product is already present with ProductName : "+product.getProductName()); 
+				}	
+			
+		}else {
+			throw new ProductException("NO Product present with ProductId : "+product.getProductid()); 
+		}
+	}
+
+	@Override
+	public String deleteProduct(Integer productid) throws ProductException {
+		// TODO Auto-generated method stub
+		Optional<Product> pr1= pr.findById(productid);
+		if(pr1.isPresent()) {
+			pr.deleteById(productid);
+			return "Product deleted successfully";
+		}
+		throw new ProductException("NO Product present with ProductId "+productid+" to be deleted");
+	}
+
+	@Override
+	public List<ShowProduct> allProducts() throws ProductException {
+		// TODO Auto-generated method stub
+		List<Product> pl= pr.findAll();
+		
+		
+		if(pl.size()>0) {
+			List<ShowProduct> spl=new ArrayList<>();
+			for(Product pr1:pl) {
+				
+				ShowProduct sp=new ShowProduct(pr1.getProductid(), pr1.getProductName(),pr1.getPrice(),pr1.getColor(),pr1.getDiscription(), pr1.getManufacturer(), pr1.getQuantity(), pr1.getCategory().getCategoryId(), pr1.getCategory().getCategoryName());
+	     spl.add(sp);
+			}
+			
+			return spl;
+		}else {
+			throw new ProductException("NO Product present");
+		}	
+	}
+
+	@Override
+	public ShowProduct getProductByName(String Name) throws ProductException {
+		// TODO Auto-generated method stub
+		Product pr1=pr.getProductByName(Name);
+		if(pr1!=null) {
+//			Product pr2= pr.save(product);
+			ShowProduct sp=new ShowProduct(pr1.getProductid(), pr1.getProductName(),pr1.getPrice(),pr1.getColor(),pr1.getDiscription(), pr1.getManufacturer(), pr1.getQuantity(), pr1.getCategory().getCategoryId(), pr1.getCategory().getCategoryName());
+		      return sp;
+		}else {
+			throw new ProductException("NO Product present with ProductName "+Name);
+		}
+	}
+
+	@Override
+	public ShowProduct getProductByID(Integer productId) throws ProductException {
+		Optional<Product> pr1= pr.findById(productId);
+		if(pr1.isPresent()) {
+			ShowProduct sp=new ShowProduct(pr1.get().getProductid(), pr1.get().getProductName(),pr1.get().getPrice(),pr1.get().getColor(),pr1.get().getDiscription(), pr1.get().getManufacturer(), pr1.get().getQuantity(), pr1.get().getCategory().getCategoryId(), pr1.get().getCategory().getCategoryName());
+			return sp;
+		}
+		throw new ProductException("NO Product present with ProductId "+productId);
+	}
+
+}

@@ -1,0 +1,133 @@
+package com.masai.model;
+
+import java.util.Objects;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+@Entity
+public class Product {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer productid;
+	private String productName;
+	private double price;
+	private String color;
+	private String discription;
+	private String manufacturer;
+	private Integer quantity;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	private Category category;
+	
+	public Product() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Product(Integer productid, String productName, double price, String color, String discription,
+			String manufacturer, Integer quantity, Category category) {
+		super();
+		this.productid = productid;
+		this.productName = productName;
+		this.price = price;
+		this.color = color;
+		this.discription = discription;
+		this.manufacturer = manufacturer;
+		this.quantity = quantity;
+		this.category = category;
+	}
+
+	public Integer getProductid() {
+		return productid;
+	}
+
+	public void setProductid(Integer productid) {
+		this.productid = productid;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public String getDiscription() {
+		return discription;
+	}
+
+	public void setDiscription(String discription) {
+		this.discription = discription;
+	}
+
+	public String getManufacturer() {
+		return manufacturer;
+	}
+
+	public void setManufacturer(String manufacturer) {
+		this.manufacturer = manufacturer;
+	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(color, discription, manufacturer, price, productName, productid, quantity);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Product other = (Product) obj;
+		return Objects.equals(color, other.color) && Objects.equals(discription, other.discription)
+				&& Objects.equals(manufacturer, other.manufacturer)
+				&& Double.doubleToLongBits(price) == Double.doubleToLongBits(other.price)
+				&& Objects.equals(productName, other.productName) && Objects.equals(productid, other.productid)
+				&& Objects.equals(quantity, other.quantity);
+	}
+   
+	
+	
+
+}

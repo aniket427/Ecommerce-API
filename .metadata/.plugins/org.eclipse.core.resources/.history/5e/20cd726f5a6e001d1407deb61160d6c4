@@ -1,0 +1,25 @@
+
+package com.masai.servicesItr;
+
+import java.util.List;
+
+import com.masai.Medel.Help.ShowProduct;
+import com.masai.exception.CatrgoryException;
+import com.masai.exception.ProductException;
+import com.masai.model.Product;
+
+public interface ProductItr {
+
+	// Administrator methods
+	public ShowProduct addProduct(Product product,Integer CategoryId)throws ProductException, CatrgoryException;
+	public ShowProduct updateProduct(Product product)throws ProductException;
+	public String deleteProduct(Integer productid)throws ProductException;// remove product from all orders and cart
+	
+	
+	//both side methods 
+	public List<ShowProduct> allProducts()throws ProductException;
+	public ShowProduct getProductByName(String Name)throws ProductException;
+	public ShowProduct getProductByID(Integer productId)throws ProductException;
+	
+	
+}

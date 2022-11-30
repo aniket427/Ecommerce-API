@@ -1,0 +1,88 @@
+package com.ecommerce.app.support;
+
+import java.util.List;
+
+//import com.masai.model.Customer;
+//import com.masai.model.Orders;
+//import com.masai.model.Product;
+
+public class ShowCart {
+
+//	private Customer customer;
+	private Integer customerId ;
+	private String firstName; 
+	private String lastName; 
+	private String mobileNumber; 
+	
+	private List<String> products;
+
+	
+	public ShowCart() {
+		// TODO Auto-generated constructor stub
+	}
+
+
+	public ShowCart(Integer customerId, String firstName, String lastName, String mobileNumber, List<String> products) {
+		super();
+		this.customerId = customerId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.mobileNumber = mobileNumber;
+		this.products = products;
+	}
+
+
+	public Integer getCustomerId() {
+		return customerId;
+	}
+
+
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
+	}
+
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+
+	public String getLastName() {
+		return lastName;
+	}
+
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+
+
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+
+
+	public List<String> getProducts() {
+		return products;
+	}
+
+
+	public void setProducts(List<String> products) {
+		this.products = products;
+	}
+	
+	
+	
+}
+
+

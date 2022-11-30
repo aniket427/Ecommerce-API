@@ -1,0 +1,34 @@
+package com.masai.servicesItr;
+
+import java.util.List;
+
+import com.masai.exception.CatrgoryException;
+import com.masai.model.Category;
+
+
+public interface CategoryItr {
+
+	
+	// Administrator methods 
+	public Category addCategory(String categoryName) throws CatrgoryException;
+	
+	public Category UpdateCategory(Category category) throws CatrgoryException;
+	
+	
+	//delete all product of That category
+	public String DeleteCategory(String Name) throws CatrgoryException;
+	
+	
+	
+	
+//	both side methods
+	public List<Category> allCategory() throws CatrgoryException;
+	
+	public Category ViewCategoryByName(String categoryName) throws CatrgoryException;
+	
+	public Category ViewCategoryById(Integer categoryId) throws CatrgoryException;
+	
+	
+	
+	
+}

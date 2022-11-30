@@ -1,0 +1,17 @@
+package com.ecommerce.app.repositories;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.ecommerce.app.model.Category;
+
+
+public interface CategoryRepo extends JpaRepository<Category, Integer>{
+
+	@Query("select c from Category c where CategoryName=?1 ")
+	public Category getCategoryByName(String CategoryName);
+	
+}
+

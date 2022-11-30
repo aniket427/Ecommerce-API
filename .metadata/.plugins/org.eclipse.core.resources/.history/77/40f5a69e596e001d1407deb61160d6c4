@@ -1,0 +1,23 @@
+package com.ecommerce.app.services;
+
+
+import com.masai.exception.UserException;
+import com.masai.exception.ProductException;
+
+
+public interface CartItr {
+
+	public ShowCart addProduct(Integer CustomerId,Integer ProductId) throws CustomerException, ProductException;
+	
+////	public Cart SetProductQuantity(Integer CustomerId,Integer ProductId,Integer Quantity) throws ProductException, CustomerException;// max 50 or whatever
+//
+////	public Cart addProductQuantity(Integer CustomerId,Integer ProductId,Integer Quantity)throws ProductException, CustomerException;// if not available add that product
+//	
+////	public Cart decreaseProductQuantity(Integer CustomerId,Integer ProductId,Integer Quantity)throws ProductException, CustomerException;// if not available show  error/ if quantity present id less show error
+//   
+	public ShowCart removeProduct(Integer CustomerId,Integer ProductId) throws ProductException, CustomerException;
+//	
+	public ShowCart viewCart(Integer CustomerId) throws CustomerException;
+	
+	
+}

@@ -1,0 +1,35 @@
+package com.ecommerce.app.model;
+
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+
+@Entity
+@NoArgsConstructor 
+@AllArgsConstructor
+@Data
+@EqualsAndHashCode(callSuper=false)
+public class Product {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer productid;
+	private String productName;
+	private double price;
+	private String color;
+	private String discription;
+	private String manufacturer;
+	private Integer quantity;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	private Category category;
+
+}

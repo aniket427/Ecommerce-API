@@ -1,0 +1,27 @@
+package com.ecommerce.app.services;
+
+import java.util.List;
+
+
+public interface UserService {
+
+	public User insertUser(User User) throws UserException;
+
+	public User updateUser(User User) throws UserException, LoginException;
+
+	public User deleteUser(Integer UserId) throws UserException, LoginException;
+
+	public List<User> getAllUsers() throws UserException, AdminException;
+
+	public User getUserById(Integer UserId) throws UserException, AdminException;
+
+	public User getUserByMobile(String mobile) throws UserException, AdminException;
+
+	public User validateUser(String userName, String password) throws UserException, AdminException;
+
+	public User updatePassword(String mobile, String oldPassword, String newPassword)
+			throws UserException, LoginException;
+
+	public String rateDriver(String mobile, String driverUserName, float rating) throws DriverException, LoginException;
+
+}

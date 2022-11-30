@@ -1,0 +1,194 @@
+package com.ecommerce.app.services;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.ecommerce.app.exceptions.AdminException;
+import com.ecommerce.app.exceptions.LoginException;
+import com.ecommerce.app.exceptions.UserException;
+import com.ecommerce.app.model.LoginSession;
+import com.ecommerce.app.model.User;
+import com.ecommerce.app.repositories.LoginSessionDao;
+import com.ecommerce.app.repositories.UserRepo;
+
+import java.util.List;
+import java.util.Optional;
+
+
+@Service
+public class UserServiceImpl implements UserService {
+
+	@Autowired
+	private UserRepo uRepo;
+
+	@Autowired
+	private LoginSessionDao loginDao;
+
+	
+
+
+	@Override
+	public User insertUser(User User) throws UserException {
+		// TODO Auto-generated method stub
+
+		User existingUser =  uRepo.getUserByUsernameAndpassword(User.getUserName(),
+				User.getPassword());
+
+		if (existingUser != null) {
+			throw new UserException("User already exist! Try Login...");
+		}
+
+		return uRepo.save(User);
+	}
+
+//### UPDATE User ###
+	@Override
+	public User updateUser(User User) throws UserException, LoginException {
+
+		Optional<LoginSession> sessionStatusUser = loginDao.findById(User.getUserId()); // Login status
+																									// check
+
+		if (sessionStatusUser != null) {
+
+			Optional<User> optional = uRepo.findById(User.getUserId());
+
+			if (optional.isPresent()) {
+
+				loginDao.deleteById(User.getUserId());
+				return uRepo.save(User);
+				
+			}
+
+			throw new UserException("User not found, please register and try again!");
+
+		}
+		throw new LoginException("Please login to perform this operation!");
+
+	}
+
+//### UPDATE PASSWORD ###
+	@Override
+	public User updatePassword(String mobile, String oldPassword, String newPassword)
+			throws UserException, LoginException {
+
+		LoginSession sessionStatusUser = loginDao.findByMobile(mobile); // Login status check
+
+		if (sessionStatusUser != null) {
+
+			User existingUser = uRepo.findByMobileAndPassword(mobile, oldPassword);
+
+			if (existingUser != null) {
+
+				existingUser.setPassword(newPassword);
+				
+				loginDao.deleteById(existingUser.getUserId());
+
+				return existingUser;
+			}
+
+			throw new UserException("User not found with mobile " + mobile);
+
+		}
+		throw new LoginException("Please login to perform this operation!");
+
+	}
+
+//### DELETE User ###
+	@Override
+	public User deleteUser(Integer UserId) throws UserException, LoginException {
+		// TODO Auto-generated method stub
+
+		LoginSession sessionStatusAdmin = loginDao.findByType("admin"); // Login status check
+		Optional<LoginSession> sessionStatusUser = loginDao.findById(UserId); // Login status check
+
+		if (sessionStatusAdmin != null || sessionStatusUser.isPresent()) {
+
+			Optional<User> optional = uRepo.findById(UserId);
+
+			if (optional.isPresent()) {
+
+				User existingUser = optional.get();
+
+				uRepo.delete(existingUser);
+
+				loginDao.deleteById(UserId);
+
+				return existingUser;
+
+			} else {
+				throw new UserException("User does not exist!");
+			}
+
+		}
+		throw new LoginException("Please login to perform this operation!");
+
+	}
+
+//### GET ALL UserS ###
+	@Override
+	public List<User> getAllUsers() throws UserException, AdminException {
+		// TODO Auto-generated method stub
+
+		LoginSession sessionStatus = loginDao.findByType("admin"); // Login status check
+
+		if (sessionStatus == null)
+			throw new AdminException("Admin privileges not available!");
+
+		List<User> Users = uRepo.findAll();
+
+		if (Users.isEmpty()) {
+			throw new UserException("User does not exist!");
+		}
+
+		return Users;
+	}
+
+//### GET User BY ID ###
+	@Override
+	public User getUserById(Integer UserId) throws UserException, AdminException {
+		// TODO Auto-generated method stub
+
+		LoginSession sessionStatus = loginDao.findByType("admin"); // Login status check
+
+		if (sessionStatus == null)
+			throw new AdminException("Admin privileges not available!");
+
+		return uRepo.findById(UserId).orElseThrow(() -> new UserException("User does not exist..."));
+	}
+
+//### GET User BY Mobile ###
+	@Override
+	public User getUserByMobile(String mobile) throws UserException, AdminException {
+		// TODO Auto-generated method stub
+
+		LoginSession sessionStatus = loginDao.findByType("admin"); // Login status check
+
+		if (sessionStatus == null)
+			throw new AdminException("Admin privileges not available!");
+
+		User fetchedUser = uRepo.findByMobile(mobile);
+
+		if (fetchedUser == null)
+			throw new UserException("User does not exist!");
+
+		return fetchedUser;
+	}
+
+//### VALIDATE User ###
+	@Override
+	public User validateUser(String userName, String password) throws UserException, AdminException {
+		// TODO Auto-generated method stub
+
+		LoginSession sessionStatus = loginDao.findByType("admin"); // Login status check
+
+		if (sessionStatus == null)
+			throw new AdminException("Admin privileges not available!");
+
+		User user = uRepo.getUserByUsernameAndpassword(userName, password);
+
+		return user;
+	}
+
+
+
+}

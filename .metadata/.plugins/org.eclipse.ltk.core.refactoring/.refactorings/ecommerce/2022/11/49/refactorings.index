@@ -1,0 +1,29 @@
+1669543882739	Rename type 'CustomerException'
+1669544208356	Rename type 'CustomerRepo'
+1669545829882	Rename type 'AdminServiceImpl'
+1669546120803	Rename compilation unit 'CustomerService.java'
+1669552884236	Rename type 'LoginControll'
+1669555938527	Delete element
+1669556139873	Delete element
+1669556161255	Delete element
+1669556466212	Copy compilation unit
+1669556756111	Copy compilation unit
+1669556814620	Rename type 'CategoryItr'
+1669556906801	Copy compilation unit
+1669737432681	Delete elements
+1669737449938	Delete elements
+1669737461038	Delete elements
+1669737469291	Delete elements
+1669737484275	Delete elements
+1669737491545	Delete elements
+1669737495529	Delete element
+1669741393390	Rename type 'AddressDao'
+1669741591057	Delete element
+1669741598850	Delete element
+1669741626266	Rename type 'CustomerDao'
+1669741673028	Rename type 'OrderDao'
+1669741684433	Rename type 'ProductDao'
+1669741729512	Rename type 'ProductDtoDao'
+1669741906818	Rename type 'ProductDto'
+1669742320751	Delete element
+1669742358245	Delete element

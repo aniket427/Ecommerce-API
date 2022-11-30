@@ -1,0 +1,113 @@
+package com.masai.Medel.Help;
+
+import javax.persistence.CascadeType;
+import javax.persistence.ManyToOne;
+
+import com.masai.model.Category;
+
+public class ShowProduct {
+
+	private Integer productid;
+	private String productName;
+	private double price;
+	private String color;
+	private String discription;
+	private String manufacturer;
+	private Integer quantity;
+	
+	private Integer categoryId;
+	private String categoryName;
+	
+	public ShowProduct() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public ShowProduct(Integer productid, String productName, double price, String color, String discription,
+			String manufacturer, Integer quantity, Integer categoryId, String categoryName) {
+		super();
+		this.productid = productid;
+		this.productName = productName;
+		this.price = price;
+		this.color = color;
+		this.discription = discription;
+		this.manufacturer = manufacturer;
+		this.quantity = quantity;
+		this.categoryId = categoryId;
+		this.categoryName = categoryName;
+	}
+
+	public Integer getProductid() {
+		return productid;
+	}
+
+	public void setProductid(Integer productid) {
+		this.productid = productid;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public String getDiscription() {
+		return discription;
+	}
+
+	public void setDiscription(String discription) {
+		this.discription = discription;
+	}
+
+	public String getManufacturer() {
+		return manufacturer;
+	}
+
+	public void setManufacturer(String manufacturer) {
+		this.manufacturer = manufacturer;
+	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+
+	public Integer getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+	
+	
+	
+}

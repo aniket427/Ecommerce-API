@@ -1,0 +1,87 @@
+package com.masai.model;
+
+import java.util.List;
+import java.util.Map;
+
+//import java.util.List;
+//import java.util.Map;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+@Entity
+public class Cart {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer cartId;
+	
+	@OneToOne
+	private Customer customer;
+	
+	@ManyToOne
+	private Orders order;
+
+    @ManyToMany
+	List<Product> products;
+	
+	public Cart() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Cart(Integer cartId, Customer customer, Orders order, Map<Product, Quantity> map) {
+		super();
+		this.cartId = cartId;
+		this.customer = customer;
+//		this.order = order;
+//		this.map = map;
+	}
+
+	public Integer getCartId() {
+		return cartId;
+	}
+
+	public void setCartId(Integer cartId) {
+		this.cartId = cartId;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
+	public Orders getOrder() {
+		return order;
+	}
+
+	public void setOrder(Orders order) {
+		this.order = order;
+	}
+
+	public List<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
+  
+	
+	
+	
+	
+	
+	
+	
+
+	
+    
+}

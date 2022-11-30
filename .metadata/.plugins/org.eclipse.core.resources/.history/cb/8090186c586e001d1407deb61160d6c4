@@ -1,0 +1,41 @@
+package com.masai.Medel.Help;
+
+import com.masai.model.Cart;
+import com.masai.model.Orders;
+
+public class RemoveOrder {
+
+	private Cart order;
+	private String Status ;
+	
+	public RemoveOrder() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public RemoveOrder(Cart order, String status) {
+		super();
+		this.order = order;
+		Status = status;
+	}
+
+	public Cart getOrder() {
+		return order;
+	}
+
+	public void setOrder(Cart order) {
+		this.order = order;
+	}
+
+	public String getStatus() {
+		return Status;
+	}
+
+	public void setStatus(String status) {
+		Status = status;
+	}
+
+	
+	
+	
+	
+}

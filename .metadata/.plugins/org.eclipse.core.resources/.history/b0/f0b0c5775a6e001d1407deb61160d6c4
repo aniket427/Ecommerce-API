@@ -1,0 +1,25 @@
+
+package com.ecommerce.app.services;
+
+import java.util.List;
+
+import com.ecommerce.app.exceptions.CategoryException;
+import com.ecommerce.app.exceptions.ProductException;
+import com.ecommerce.app.support.ShowProduct;
+
+
+public interface ProductItr {
+
+	// Administrator methods
+	public ShowProduct addProduct(Product product,Integer CategoryId)throws ProductException, CategoryException;
+	public ShowProduct updateProduct(Product product)throws ProductException;
+	public String deleteProduct(Integer productid)throws ProductException;// remove product from all orders and cart
+	
+	
+	//both side methods 
+	public List<ShowProduct> allProducts()throws ProductException;
+	public ShowProduct getProductByName(String Name)throws ProductException;
+	public ShowProduct getProductByID(Integer productId)throws ProductException;
+	
+	
+}

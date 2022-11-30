@@ -1,0 +1,50 @@
+package com.ecommerce.app.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ecommerce.app.exceptions.OrderException;
+import com.ecommerce.app.exceptions.UserException;
+import com.ecommerce.app.services.OrderImpl;
+import com.ecommerce.app.support.ShowOrders;
+
+
+
+@RestController
+public class OrderController {
+
+	@Autowired
+	private OrderImpl oi;
+	
+	@PutMapping("/makeOrder/{CustomerID}")
+	public ResponseEntity<ShowOrders> makeOrder(@PathVariable Integer CustomerID)throws OrderException, UserException{
+ 		ShowOrders or=oi.makeOrder(CustomerID);	
+    	return new ResponseEntity<>(or,HttpStatus.ACCEPTED);
+	}; 
+	
+//	@DeleteMapping("/removeOrder/{CustomerID}/{password}/{orderNumber}")
+//	public ResponseEntity<RemoveOrder> removeOrder(@PathVariable Integer CustomerID,@PathVariable Integer password,@PathVariable Integer orderNumber)throws OrderException, CustomerException{
+//		RemoveOrder or=oi.RemoveOrder(CustomerID, password, orderNumber)	;
+//    	return new ResponseEntity<>(or,HttpStatus.ACCEPTED);
+//	};
+//	
+//	@DeleteMapping("/clearOrder/{CustomerID}/{password}")
+//	public ResponseEntity<String> clearOrder(@PathVariable Integer CustomerID,@PathVariable String password)throws OrderException, CustomerException{
+//		String or=oi.ClearOrder(CustomerID, password);
+//    	return new ResponseEntity<>(or,HttpStatus.ACCEPTED);
+//	};
+//	
+	@GetMapping("/viewOrders/{CustomerID}/{password}")
+	public ResponseEntity<ShowOrders> allOrder(@PathVariable Integer CustomerID,@PathVariable String password)throws OrderException, UserException{
+		ShowOrders or=oi.viewOrders(CustomerID, password)	;
+    	return new ResponseEntity<>(or,HttpStatus.ACCEPTED);
+	};
+}

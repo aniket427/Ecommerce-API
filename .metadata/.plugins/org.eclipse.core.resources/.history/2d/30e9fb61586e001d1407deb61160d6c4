@@ -1,0 +1,41 @@
+package com.masai.model;
+
+import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+import com.ecommerce.app.model.Orders;
+import com.ecommerce.app.model.Product;
+import com.ecommerce.app.model.User;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+@Entity
+@NoArgsConstructor 
+@AllArgsConstructor
+@Data
+@EqualsAndHashCode(callSuper=false)
+public class Cart {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer cartId;
+	
+	@OneToOne
+	private User customer;
+	
+	@ManyToOne
+	private Orders order;
+
+    @ManyToMany
+	List<Product> products;
+
+}

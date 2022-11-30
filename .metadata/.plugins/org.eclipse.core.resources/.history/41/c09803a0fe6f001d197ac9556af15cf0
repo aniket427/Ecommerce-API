@@ -1,0 +1,31 @@
+package com.ecommerce.app.support;
+
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+//import com.masai.model.Customer;
+//import com.masai.model.Orders;
+//import com.masai.model.Product;
+
+
+@NoArgsConstructor 
+@AllArgsConstructor
+@Data
+@EqualsAndHashCode(callSuper=false)
+public class ShowCart {
+
+//	private Customer customer;
+	private Integer UserId ;
+	private String firstName; 
+	private String lastName; 
+	private String mobileNumber; 
+	
+	private List<String> products;
+	
+}
+
+

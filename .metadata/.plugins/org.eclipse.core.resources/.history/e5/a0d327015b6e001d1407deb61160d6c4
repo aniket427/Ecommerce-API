@@ -1,0 +1,295 @@
+package com.ecommerce.app.services;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import org.apache.catalina.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.ecommerce.app.exceptions.ProductException;
+import com.ecommerce.app.exceptions.UserException;
+import com.ecommerce.app.model.Product;
+import com.ecommerce.app.repositories.CartRepo;
+import com.ecommerce.app.repositories.ProductRepo;
+import com.ecommerce.app.repositories.UserRepo;
+import com.ecommerce.app.support.ShowCart;
+
+
+
+@Service
+public class CartImpl implements CartItr{
+	
+	@Autowired
+	private UserRepo cr;
+	
+	@Autowired
+	private CartRepo car;
+	
+	@Autowired
+	private ProductRepo pr;
+	
+
+	
+	@Override
+	public ShowCart addProduct(Integer UserId, Integer ProductId) throws UserException, ProductException {
+		// TODO Auto-generated method stub
+     Optional<User> c= cr.findById(UserId);
+		if(c.isPresent()) {
+			Optional<Product> pro=pr.findById(ProductId);
+			if(pro.isPresent()){
+								
+				
+				if(c.get().getCart()!=null){
+					
+					
+					List<Product> products = c.get().getCart().getProducts();
+					
+					boolean flag=true;
+					for(Product p:products) {
+//						   pnames.add(p.getProductName());
+						if(p.getProductid()==ProductId) {
+							flag=false;
+						}
+					}
+					
+					
+				if(flag) {	
+			    
+					c.get().getCart().getProducts().add(pro.get());
+					cr.save(c.get());
+					
+					ShowCart sc= new ShowCart();
+					   sc.setUserId(UserId);
+					   sc.setFirstName(c.get().getFirstName());
+					   sc.setLastName(c.get().getLastName());
+					   sc.setMobileNumber(c.get().getMobileNumber());
+					   
+					   List<String> pnames= new ArrayList<>();
+					   
+					   for(Product p: c.get().getCart().getProducts()) {
+						   pnames.add(p.getProductName());
+					   }
+					   sc.setProducts(pnames);
+					return sc;
+				 }	
+				else {
+					 throw new ProductException("product already available in your list");   	 
+				 }
+				
+				}
+				else{
+					
+					Cart cart=new Cart();
+					
+					List<Product> products = new ArrayList<>();
+					products.add(pro.get());
+					
+					cart.setProducts(products);
+					cart.setUser(c.get());
+					c.get().setCart(cart);
+					Cart cart2=car.save(cart);
+					c.get().setCart(cart2);
+					cr.save(c.get());
+					
+					ShowCart sc= new ShowCart();
+				   sc.setUserId(UserId);
+				   sc.setFirstName(c.get().getFirstName());
+				   sc.setLastName(c.get().getLastName());
+				   sc.setMobileNumber(c.get().getMobileNumber());
+					
+				   
+				   List<String> pnames= new ArrayList<>();
+				   
+				   for(Product p:cart2.getProducts()) {
+					   pnames.add(p.getProductName());
+				   }
+				   sc.setProducts(pnames);
+					return sc;
+					
+				}
+			 }
+			else {
+				 throw new ProductException("no Product present with given  id");
+			 }
+		}
+		else {
+			throw new UserException("no User present with given  id");
+		}	
+	}
+//
+//	@Override
+//	public Cart SetProductQuantity(Integer UserId, Integer ProductId, Integer Quantity) throws ProductException, UserException {
+//		// TODO Auto-generated method stub
+//		 Optional<User> c= cr.findById(UserId);
+//			
+//			if(c.isPresent()) {
+//			
+//				Optional<Product> pro=pr.findById(ProductId);
+//				if(pro.isPresent()) {
+//							
+//					Quantity q=  c.get().getCart().getMap().get(pro.get());
+//					q.setQuantity(Quantity);
+//						c.get().getCart().getMap().put(pro.get(),q);	
+//						return c.get().getCart();
+//						
+//				 }	else {
+//					 throw new ProductException("no Product present with given  id");
+//				 }
+//			}
+//			else {
+//				throw new UserException("no User present with given  id");
+//			}
+//	}
+//
+//	@Override
+//	public Cart addProductQuantity(Integer UserId, Integer ProductId, Integer Quantity) throws ProductException, UserException {
+//		// TODO Auto-generated method stub
+//    Optional<User> c= cr.findById(UserId);
+//		
+//		if(c.isPresent()) {
+//		
+//			Optional<Product> pro=pr.findById(ProductId);
+//			if(pro.isPresent()) {
+//				if(c.get().getCart().getMap().get(pro.get())==null) {
+//					Quantity  q = new Quantity();
+//					q.setQuantity(Quantity);
+//					c.get().getCart().getMap().put(pro.get(),q);
+//					cr.save(c.get());
+//					return c.get().getCart();
+//			    }
+//				else {
+//					Quantity q= c.get().getCart().getMap().get(pro.get());
+//					q.setQuantity(q.getQuantity()+Quantity);
+//					c.get().getCart().getMap().put(pro.get(),q);	
+//					cr.save(c.get());
+//					return c.get().getCart();
+//				 }
+//			
+//			 }	else {
+//				 throw new ProductException("no Product present with given  id");
+//			 }
+//		}
+//		else {
+//			throw new UserException("no User present with given  id");
+//		}
+//	}
+//
+//	@Override
+//	public Cart decreaseProductQuantity(Integer UserId, Integer ProductId, Integer Quantity) throws ProductException, UserException {
+//		// TODO Auto-generated method stub
+//		 Optional<User> c= cr.findById(UserId);
+//			
+//			if(c.isPresent()) {
+//			
+//				Optional<Product> pro=pr.findById(ProductId);
+//				if(pro.isPresent()) {
+//					if(c.get().getCart().getMap().get(pro.get())==null) {
+//						throw new ProductException("no Quantity of this product is available in cart to be decreased");
+//				    }
+//					else {
+//						Quantity q= c.get().getCart().getMap().get(pro.get());
+//						if(q.getQuantity()<=Quantity) {
+////							q.setQuantity(0);
+//							c.get().getCart().getMap().remove(pro.get());
+//							cr.save(c.get());
+//						}else {							
+//							q.setQuantity(q.getQuantity()-Quantity);
+//							c.get().getCart().getMap().put(pro.get(),q);
+//							cr.save(c.get());
+//						}
+//						
+//						return c.get().getCart();
+//					 }
+//				 }	else {
+//					 throw new ProductException("no Product present with given  id");
+//				 }
+//			}
+//			else {
+//				throw new UserException("no User present with given  id");
+//			}
+//	}
+//
+	@Override
+	public ShowCart removeProduct(Integer UserId, Integer ProductId) throws ProductException, UserException {
+		// TODO Auto-generated method stub
+		 Optional<User> c= cr.findById(UserId);
+			
+			if(c.isPresent()) {
+			
+				Optional<Product> pro=pr.findById(ProductId);
+				if(pro.isPresent()) {
+					
+					if(c.get().getCart()!=null) {
+						boolean flag=false;
+						for(Product p:c.get().getCart().getProducts()) {
+//						   pnames.add(p.getProductName());
+							if(p.getProductid()==ProductId) {
+								flag=true;
+							}
+						}
+						if(flag) {
+						c.get().getCart().getProducts().remove(pro.get());
+					
+							
+							cr.save(c.get());
+							ShowCart sc= new ShowCart();
+							   sc.setUserId(UserId);
+							   sc.setFirstName(c.get().getFirstName());
+							   sc.setLastName(c.get().getLastName());
+							   sc.setMobileNumber(c.get().getMobileNumber());
+							   
+							   List<String> pnames= new ArrayList<>();
+							   
+							   for(Product p: c.get().getCart().getProducts()) {
+								   pnames.add(p.getProductName());
+							   }
+							   sc.setProducts(pnames);
+							   return sc;
+						}else {
+							throw new ProductException("no item present for the given productid in cart to be removed ");
+						}
+						
+					}
+					else
+						throw new ProductException("no item present in cart to be removed ");
+					
+					
+				 }else {
+					 throw new ProductException("no Product present with given  id");
+				 }
+			}
+			else {
+				throw new UserException("no User present with given  id");
+			}
+	}
+//
+	@Override
+	public ShowCart viewCart(Integer UserId) throws UserException {
+		// TODO Auto-generated method stub
+		
+		Optional<User> c= cr.findById(UserId);
+		
+		if(c.isPresent()) {
+			ShowCart sc= new ShowCart();
+			   sc.setUserId(UserId);
+			   sc.setFirstName(c.get().getFirstName());
+			   sc.setLastName(c.get().getLastName());
+			   sc.setMobileNumber(c.get().getMobileNumber());
+			   
+			   List<String> pnames= new ArrayList<>();
+			   
+			   for(Product p: c.get().getCart().getProducts()) {
+				   pnames.add(p.getProductName());
+			   }
+			   sc.setProducts(pnames);
+			return sc;
+		}
+		
+		throw new UserException("no User present with given  id");
+	}
+
+}

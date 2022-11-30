@@ -1,0 +1,109 @@
+package com.ecommerce.app.services;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.masai.Repo.CategoryRepo;
+import com.masai.exception.CatrgoryException;
+import com.masai.model.Category;
+import com.masai.servicesItr.CategoryItr;
+
+@Service
+public class CategoryImpl implements CategoryServices{
+
+	
+	@Autowired
+	private CategoryRepo cr;
+	
+	//done
+	@Override
+	public Category addCategory(String categoryName) throws CatrgoryException {
+		// TODO Auto-generated method stub
+		Category ct=cr.getCategoryByName(categoryName);
+		
+		if(ct==null) {
+			Category c= new Category();
+			c.setCategoryName(categoryName);
+			cr.save(c);
+           return c;			
+		}
+		
+		throw new CatrgoryException ("category alredy present");
+	}
+
+	//done
+	@Override
+	public Category UpdateCategory(Category category) throws CatrgoryException {
+		// TODO Auto-generated method stub
+		Optional<Category> ct= cr.findById(category.getCategoryId());
+		
+		Category ctn= cr.getCategoryByName(category.getCategoryName());
+		if(ct.isPresent()) {
+			if(ctn==null) {
+			ct.get().setCategoryName(category.getCategoryName());
+			cr.save(ct.get());
+			return ct.get();
+			}
+			else {
+				throw new CatrgoryException ("category alredy present cant update to a existing category");
+			}
+		}
+		
+		throw new CatrgoryException ("NO category present to be updated with category id : "+category.getCategoryId());
+		
+		
+	}
+
+	@Override
+	public String DeleteCategory(String Name) throws CatrgoryException {
+		// TODO Auto-generated method stub
+		Category ct= cr.getCategoryByName(Name);
+		
+		if(ct!=null) {
+			cr.deleteById(ct.getCategoryId());
+			return "category " +Name+" deleted successfully";
+		}
+		throw new CatrgoryException ("NO category present to be Deleted with category Name : "+Name );
+	}
+
+	@Override
+	public List<Category> allCategory() throws CatrgoryException {
+		// TODO Auto-generated method stub
+		
+		List<Category> lc= cr.findAll();
+		if(lc.size()>0) {
+			return lc;
+		}
+		throw new CatrgoryException ("NO category present ");
+	}
+
+	@Override
+	public Category ViewCategoryByName(String categoryName) throws CatrgoryException {
+		// TODO Auto-generated method stub
+		
+     Category ct= cr.getCategoryByName(categoryName);
+		
+		if(ct!=null) {
+			return ct;
+			
+	   }
+		throw new CatrgoryException ("NO category present with category Name : "+categoryName );
+		
+	}
+
+	@Override
+	public Category ViewCategoryById(Integer categoryId) throws CatrgoryException {
+		// TODO Auto-generated method stub
+		
+    Optional<Category> ct= cr.findById(categoryId);
+		
+		if(ct.isPresent()) {
+			return ct.get();
+		}
+		throw new CatrgoryException ("NO category present with category id : "+categoryId);
+	}
+
+}

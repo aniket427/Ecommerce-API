@@ -1,0 +1,30 @@
+package com.masai.Medel.Help;
+
+import java.util.List;
+
+public class ShowOrders {
+
+   private List<ShowCart> myorders; 
+		
+   public ShowOrders() {
+	// TODO Auto-generated constructor stub
+}
+
+public ShowOrders(List<ShowCart> myorders) {
+	super();
+	this.myorders = myorders;
+}
+
+public List<ShowCart> getMyorders() {
+	return myorders;
+}
+
+public void setMyorders(List<ShowCart> myorders) {
+	this.myorders = myorders;
+}
+   
+   
+   
+}
+
+

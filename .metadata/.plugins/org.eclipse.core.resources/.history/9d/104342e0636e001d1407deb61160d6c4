@@ -1,0 +1,251 @@
+package com.ecommerce.app.services;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.ecommerce.app.exceptions.OrderException;
+import com.ecommerce.app.exceptions.UserException;
+import com.ecommerce.app.model.Cart;
+import com.ecommerce.app.model.Orders;
+import com.ecommerce.app.model.Product;
+import com.ecommerce.app.model.User;
+import com.ecommerce.app.repositories.CartRepo;
+import com.ecommerce.app.repositories.OrderRepo;
+import com.ecommerce.app.repositories.UserRepo;
+import com.ecommerce.app.support.ShowCart;
+import com.ecommerce.app.support.ShowOrders;
+
+@Service
+public class OrderImpl implements OrderItr{
+
+	@Autowired
+	private UserRepo cr;
+	
+	@Autowired
+	private OrderRepo odr;
+	
+@Autowired
+private CartRepo carr;
+	
+	@Override
+	public ShowOrders makeOrder(Integer CustomerID) throws OrderException, UserException {
+		// TODO Auto-generated method stub
+		
+	   Optional<User> c1=cr.findById(CustomerID);	
+	   //====================================================
+	   if(c1.isPresent()) {
+		   
+		   if(c1.get().getCart()!=null){
+//			   ======================================
+          if(c1.get().getOrders()!=null) {
+        	  
+        	  c1.get().getOrders().getMyOrders().add(c1.get().getCart());
+        	  carr.deleteById(c1.get().getCart().getCartId());
+        	  c1.get().setCart(null);
+        	  User c2=cr.save(c1.get());
+        	  
+        	  ShowOrders sor= new ShowOrders();
+        	  
+        	  
+        	  List<ShowCart> lsc= new ArrayList<>();
+        	  
+        	  for(Cart cs:c2.getOrders().getMyOrders()) {
+        		  
+        		  ShowCart sc= new ShowCart();
+        		  sc.setUserId(CustomerID);
+        		  sc.setFirstName(c2.getFirstName());
+        		  sc.setLastName(c2.getLastName());
+        		  sc.setMobileNumber(c2.getMobileNumber());
+        		  List<String> carstr =new ArrayList<>();
+        		  
+        		  for(Product p:cs.getProducts()) {
+        			  carstr.add(p.getProductName());
+        		  }
+        		  
+        		  sc.setProducts(carstr);
+        		  
+        		lsc.add(sc);  
+        	  }
+        	  sor.setMyorders(lsc);
+        	  return sor;
+        	  
+          }
+          else {
+        	  
+        	  Orders or=new Orders();
+        	  List<Cart> lc=new ArrayList<>();
+        	  lc.add(c1.get().getCart()); 
+        	  or.setMyOrders(lc);
+        	  or.setCustomer(c1.get());
+        	  
+        	 c1.get().setOrders(or);
+        	 
+        	  carr.deleteById(c1.get().getCart().getCartId());
+        	  c1.get().setCart(null);
+        	  User c2=cr.save(c1.get());
+//        	   Orders ord2=odr.save(or);
+        	   
+        	   ShowOrders sor= new ShowOrders();
+         	  List<ShowCart> lsc= new ArrayList<>();
+         	  
+         	  
+         	  
+         	  for( Cart cs: c1.get().getOrders().getMyOrders()) {
+         		  
+         		  ShowCart sc= new ShowCart();
+         		  
+         		  sc.setUserId(CustomerID);
+         		  sc.setFirstName(c2.getFirstName());
+         		  sc.setLastName(c2.getLastName());
+         		  sc.setMobileNumber(c2.getMobileNumber());
+         		  List<String> carstr =new ArrayList<>();
+         		  
+         		  for(Product p:cs.getProducts()) {
+         			  carstr.add(p.getProductName());
+         		  }
+         		  
+         		  sc.setProducts(carstr);
+         		  
+         		lsc.add(sc);  
+         	  }
+         	  sor.setMyorders(lsc);
+        	  
+        	  return sor;  	    
+          }
+//            
+//           			  =======================================
+		   }
+		   throw new  OrderException("No items present  in  cart for  ordering");
+	   }
+	   
+	   throw new  UserException("NO customer with CustomerId "+CustomerID+" is present ");
+	}
+//
+//	@Override
+//	public com.masai.Medel.Help.RemoveOrder RemoveOrder(Integer customerid,Integer password, Integer orderNumber) throws OrderException, CustomerException {
+//		// TODO Auto-generated method stub
+//		Optional<Customer> c1= cr.findById(customerid);
+//		if(c1.isPresent()) {
+//			if(c1.get().getPassword().equals(password)) {
+//				
+//				List<Orders> cl= c1.get().getOrders();
+//				if(cl.size()>=orderNumber) {
+//					Orders or= cl.get(orderNumber-1);
+//					RemoveOrder ro= new RemoveOrder();
+//					ro.setOrder(or.getMyOrders());
+//					ro.setStatus("Order Cancelled");
+//					
+//					cl.remove(orderNumber-1);
+//					
+//					return ro;
+//				}
+//				
+//				throw new OrderException("No order present at orderNumber : "+orderNumber);
+//				
+//				
+//			}else {
+//				throw new  CustomerException("Please check your customerId and Password");
+//			}
+//		}else {
+//			
+//			throw new  CustomerException("NO customer with CustomerId "+customerid+" is present to be Deleted ");
+//		}
+//		
+//		
+//		
+//	}
+//
+//	@Override
+//	public String ClearOrder(Integer Customerid,String password) throws OrderException, CustomerException {
+//		// TODO Auto-generated method stub
+//		Optional<Customer> c1= cr.findById(Customerid);
+//		if(c1.isPresent()) {
+//			if(c1.get().getPassword().equals(password)) {
+//				
+//				if(c1.get().getOrders()!=null) {
+//				
+//					if(c1.get().getOrders().getMyOrders()!=null) {
+//						odr.deleteById(c1.get().getOrders().getOrderID()) ;
+//						
+////						c1.get().setOrders(null);
+//						
+//						return "orders cleared successfully";
+////						
+//					}
+//					throw new OrderException("No order present to be cleared");
+//				}
+//				
+//				throw new OrderException("No order present to be cleared");
+//				
+//				
+//			}else {
+//				throw new  CustomerException("Please check your customerId and Password");
+//			}
+//		}else {
+//			
+//			throw new  CustomerException("NO customer with CustomerId "+Customerid+" is present to be Deleted ");
+//		}
+//	}
+
+	@Override
+	public ShowOrders viewOrders(Integer CustomerID,String password) throws OrderException, UserException {
+		// TODO Auto-generated method stub
+		Optional<User> c1= cr.findById(CustomerID);
+		if(c1.isPresent()) {
+			if(c1.get().getPassword().equals(password)) {
+				
+				if(c1.get().getOrders()!=null) {
+					
+					if(c1.get().getOrders().getMyOrders()!=null) {
+						
+						
+						  ShowOrders sor= new ShowOrders();
+			         	  List<ShowCart> lsc= new ArrayList<>();
+			         	   	  
+			         	  for( Cart cs: c1.get().getOrders().getMyOrders()) {
+			         		  ShowCart sc= new ShowCart();
+			         		  
+			         		  sc.setUserId(CustomerID);
+			         		  sc.setFirstName(c1.get().getFirstName());
+			         		  sc.setLastName(c1.get().getLastName());
+			         		  sc.setMobileNumber(c1.get().getMobileNumber());
+			         		  List<String> carstr =new ArrayList<>();
+			         		  
+			         		  for(Product p:cs.getProducts()) {
+			         			  carstr.add(p.getProductName());
+			         		  }
+			         		  
+			         		  sc.setProducts(carstr);
+			         		  
+			         		lsc.add(sc);  
+			         	  }
+			         	  sor.setMyorders(lsc);
+			        	  
+			        	  return sor;
+						
+						
+					}
+					else {
+						throw new OrderException("No orders present ");
+					}
+					
+				}
+				
+				
+				throw new OrderException("No orders present ");
+				
+				
+			}else {
+				throw new  UserException("Please check your customerId and Password");
+			}
+		}else {
+			
+			throw new  UserException("NO customer with CustomerId "+CustomerID+" is present to be Deleted ");
+		}
+	}
+
+}

@@ -1,0 +1,13 @@
+package com.ecommerce.app.services;
+
+import com.ecommerce.app.exceptions.LoginException;
+import com.ecommerce.app.model.LoginDTO;
+import com.ecommerce.app.model.LoginSession;
+
+public interface LoginService {
+	
+	public LoginSession userLoginService(LoginDTO logindata) throws LoginException, Exception;
+	
+	public String UserLogoutService(String Key) throws LoginException;
+
+}
